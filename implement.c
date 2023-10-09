@@ -3,29 +3,29 @@
 DRV_DHCP dhcp;
 
 /*********************************** DHCP ***********************************/
-void MOD_NET_DhcpDelayMs(uint16_t ms);
-void MOD_NET_DhcpUdpSocket(uint16_t port);
-void MOD_NET_DhcpUdpSend(uint8_t *ip, uint16_t port, uint8_t *data,uint16_t len);
-void MOD_NET_DhcpSet(uint8_t *local_ip, uint8_t *gateway_ip, uint8_t *subnet_mask);
-void MOD_NET_DhcpEventHandle(DHCP_STEP step);
-void MOD_NET_DhcpTimerStart(void *body, void(*call)(void *body), bool cyc, uint16_t sec);
-void MOD_NET_DhcpTimerStop(void);
+void NET_DhcpDelayMs(uint16_t ms);
+void NET_DhcpUdpSocket(uint16_t port);
+void NET_DhcpUdpSend(uint8_t *ip, uint16_t port, uint8_t *data,uint16_t len);
+void NET_DhcpSet(uint8_t *local_ip, uint8_t *gateway_ip, uint8_t *subnet_mask);
+void NET_DhcpEventHandle(DHCP_STEP step);
+void NET_DhcpTimerStart(void *body, void(*call)(void *body), bool cyc, uint16_t sec);
+void NET_DhcpTimerStop(void);
 
-/*********************************** ³õÊ¼»¯ Init ***********************************/
-void MOD_NET_DhcpInit(void){
-	dhcp.hal.delay_ms = MOD_NET_DhcpDelayMs;
-	dhcp.hal.udp_socket = MOD_NET_DhcpUdpSocket;
-	dhcp.hal.udp_send = MOD_NET_DhcpUdpSend;
-	dhcp.hal.set = MOD_NET_DhcpSet;
-	dhcp.hal.event_handle = MOD_NET_DhcpEventHandle;
-	dhcp.hal.timer_start = MOD_NET_DhcpTimerStart;
-	dhcp.hal.timer_stop = MOD_NET_DhcpTimerStop;
+/*********************************** åˆå§‹åŒ– Init ***********************************/
+void NET_DhcpInit(void){
+	dhcp.hal.delay_ms = NET_DhcpDelayMs;
+	dhcp.hal.udp_socket = NET_DhcpUdpSocket;
+	dhcp.hal.udp_send = NET_DhcpUdpSend;
+	dhcp.hal.set = NET_DhcpSet;
+	dhcp.hal.event_handle = NET_DhcpEventHandle;
+	dhcp.hal.timer_start = NET_DhcpTimerStart;
+	dhcp.hal.timer_stop = NET_DhcpTimerStop;
 	
 	DRV_DHCP_Init(&dhcp, net_obj.w5500.local.mac, "NetworkModuleName");
 }
 
-/*********************************** »Øµ÷ CallBack ***********************************/
-static void MOD_Handle(SOCKET_EVENT event, uint8_t socket_ch, uint8_t *data, uint16_t len){
+/*********************************** å›è°ƒ CallBack ***********************************/
+static void Handle(SOCKET_EVENT event, uint8_t socket_ch, uint8_t *data, uint16_t len){
 	switch(event){
 		case SOCKET_PHY:
 			break;
@@ -44,59 +44,59 @@ static void MOD_Handle(SOCKET_EVENT event, uint8_t socket_ch, uint8_t *data, uin
 	}
 }
 
-/*********************************** ÊµÏÖ implement ***********************************/
-void MOD_NET_DhcpDelayMs(uint16_t ms){
-  //ºÁÃëÑÓÊ±
+/*********************************** å®ç° implement ***********************************/
+void NET_DhcpDelayMs(uint16_t ms){
+  //æ¯«ç§’å»¶æ—¶
   //delay ms
 }
 
-void MOD_NET_DhcpUdpSocket(uint16_t port){
-  //´´½¨UDPµÄsocket
+void NET_DhcpUdpSocket(uint16_t port){
+  //åˆ›å»ºUDPçš„socket
   //Creat UDP socket
 }
 
-void MOD_NET_DhcpUdpSend(uint8_t *ip, uint16_t port, uint8_t *data,uint16_t len){
-  //UDP ·¢Éú
+void NET_DhcpUdpSend(uint8_t *ip, uint16_t port, uint8_t *data,uint16_t len){
+  //UDP å‘ç”Ÿ
   //UDP send
 }
 
-void MOD_NET_DhcpSet(uint8_t *local_ip, uint8_t *gateway_ip, uint8_t *subnet_mask){
-  //ÉèÖÃÍø¿¨²ÎÊı
+void NET_DhcpSet(uint8_t *local_ip, uint8_t *gateway_ip, uint8_t *subnet_mask){
+  //è®¾ç½®ç½‘å¡å‚æ•°
   //set NetWork Module Config
 }
 
 
-void MOD_NET_DhcpEventHandle(DHCP_STEP step){
+void NET_DhcpEventHandle(DHCP_STEP step){
 	switch(step){
 		case DHCP_STEP_DISCOVER:
-			//·¢ËÍDISCOVER²¢µÈ´ıOFFER
-			//send DISCOVER£¬watting OFFER
+			//å‘é€DISCOVERå¹¶ç­‰å¾…OFFER
+			//send DISCOVERï¼Œwatting OFFER
 			break;
 		
 		case DHCP_STEP_REQUEST:
-			//·¢ËÍREQUEST²¢µÈ´ıACK»òNACK
-			//send REQUES£¬watting ACK/NACK
+			//å‘é€REQUESTå¹¶ç­‰å¾…ACKæˆ–NACK
+			//send REQUESï¼Œwatting ACK/NACK
 			break;
 			
 		case DHCP_STEP_HIRE:
 			if(net_obj.net.data.dhcp_ok){
 				//Hire
-        //Ğø×â
+        //ç»­ç§Ÿ
 			}else{
 				//First Hire
-        //³õ´Î×âÓÃ
+        //åˆæ¬¡ç§Ÿç”¨
 			}
 			break;
 	}
 }
 
-void MOD_NET_DhcpTimerStart(void *body, void(*call)(void *body), bool cyc, uint16_t sec){
-	//¶¨Ê±Æ÷Æô¶¯
+void NET_DhcpTimerStart(void *body, void(*call)(void *body), bool cyc, uint16_t sec){
+	//å®šæ—¶å™¨å¯åŠ¨
   //Timer Start
 }
 
-void MOD_NET_DhcpTimerStop(void){
-  //¶¨Ê±Æ÷Í£Ö¹
+void NET_DhcpTimerStop(void){
+  //å®šæ—¶å™¨åœæ­¢
 	//Timer Stop
 }
 
